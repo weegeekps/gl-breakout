@@ -320,6 +320,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Paddle.cpp" />
+    <ClCompile Include="Walls.cpp" />
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="BlockColorSequencer.h" />
     <ClInclude Include="C:\Users\amorris\Documents\Github\gl-breakout\gl_common\Box3D.h" />
@@ -363,6 +367,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\amorris\Documents\Github\gl-breakout\gl_common\camera.cpp" />
     <ClCompile Include="C:\Users\amorris\Documents\Github\gl-breakout\gl_common\controls.cpp" />
     <ClCompile Include="C:\Users\amorris\Documents\Github\gl-breakout\gl_common\trackball.cpp" />
+    <ClInclude Include="FieldConfiguration.h" />
+    <ClInclude Include="Paddle.h" />
+    <ClInclude Include="Walls.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/Users/amorris/Documents/Github/gl-breakout/ZERO_CHECK.vcxproj">
@@ -378,6 +385,26 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="models\Normal_Block.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="models\Side_Wall.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="models\Back_Wall.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="models\Paddle.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="models\Ball.obj">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
