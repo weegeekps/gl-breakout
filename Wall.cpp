@@ -69,11 +69,11 @@ void Wall::init(FieldConfiguration configuration)
 
 	switch (type)
 	{
-	case LEFT_WALL:
+	case RIGHT_WALL:
 		initial_position = glm::vec3(configuration.x_minimum, 0.0f, 0.0f);
 		wall_transform = glm::translate(initial_position)/* * wall_rotation*/;
 		break;
-	case RIGHT_WALL:
+	case LEFT_WALL:
 		initial_position = glm::vec3(configuration.x_maximum, 0.0f, 0.0f);
 		wall_transform = glm::translate(initial_position)/* * wall_rotation*/;
 		break;
@@ -86,7 +86,7 @@ void Wall::init(FieldConfiguration configuration)
 	wall->setMatrix(wall_transform);
 
 	CollisionObject::bounding_box = new BoundingBox(*wall);
-	CollisionObject::bounding_box->recalculate(glm::normalize(initial_position));
+	CollisionObject::bounding_box->recalculate(initial_position);
 }
 
 void Wall::draw() const
@@ -97,4 +97,9 @@ void Wall::draw() const
 	}
 
 	wall->draw();
+}
+
+WALL_TYPE Wall::getType() const
+{
+	return type;
 }

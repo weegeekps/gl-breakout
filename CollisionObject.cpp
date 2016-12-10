@@ -19,7 +19,7 @@ BoundingBox* CollisionObject::get_bounding_box() const
 	return bounding_box;
 }
 
-bool CollisionObject::check_collision(CollisionObject &object)
+bool CollisionObject::check_collision(CollisionObject &object) const
 {
 	BoundingBox& other_bb = *object.get_bounding_box();
 	COLLISION_TYPE collision = bounding_box->is_colliding_with(other_bb);

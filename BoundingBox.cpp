@@ -58,15 +58,15 @@ void BoundingBox::recalculate(glm::vec3 translation_vector)
 		}
 	}
 
-	min += translation_vector;
-	max += translation_vector;
+	min = min + translation_vector;
+	max = max + translation_vector;
 }
 
 COLLISION_TYPE BoundingBox::is_colliding_with(BoundingBox &other_bb) const
 {
 	if (max.x < other_bb.min.x || min.x > other_bb.max.x ||
 		max.y < other_bb.min.y || min.y > other_bb.max.y ||
-		max.z < other_bb.max.z || min.z > other_bb.max.z)
+		max.z < other_bb.min.z || min.z > other_bb.max.z)
 	{
 		return NONE;
 	}

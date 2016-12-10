@@ -31,5 +31,7 @@ public:
 	*/
 	void init(FieldConfiguration configuration);
 	void draw() const;
+
+	WALL_TYPE getType() const;
 };
 

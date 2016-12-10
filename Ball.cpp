@@ -4,7 +4,7 @@
 #include <glm/gtx/transform.hpp>
 #include "gl_common/GLObjectObj.h"
 
-Ball::Ball()
+Ball::Ball(unsigned int min_velocity_factor, unsigned int max_velocity_factor, unsigned int velocity_factor_step): min_velocity_factor(min_velocity_factor), max_velocity_factor(max_velocity_factor), velocity_factor_step(velocity_factor_step)
 {
 }
 
@@ -100,22 +100,14 @@ void Ball::reset()
 
 void Ball::bounce_on_x_axis()
 {
-	if (dont_switch_x_counter > 0)
-	{
-		dont_switch_x_counter--;
-		return;
-	}
-
 	if (x_direction == BALL_LEFT)
 	{
 		x_direction = BALL_RIGHT;
-	} 
+	}
 	else
 	{
 		x_direction = BALL_LEFT;
 	}
-
-	dont_switch_x_counter = 20; // 5 frames. this is such a hack.
 }
 
 void Ball::bounce_on_z_axis()
@@ -127,5 +119,37 @@ void Ball::bounce_on_z_axis()
 	else
 	{
 		z_direction = BALL_UP;
+	}
+}
+
+void Ball::increase_x_velocity()
+{
+	if (x_velocity_factor < max_velocity_factor)
+	{
+		x_velocity_factor += velocity_factor_step;
+	}
+}
+
+void Ball::decrease_x_velocity()
+{
+	if (x_velocity_factor > min_velocity_factor)
+	{
+		x_velocity_factor -= velocity_factor_step;
+	}
+}
+
+void Ball::increase_z_velocity()
+{
+	if (z_velocity_factor < max_velocity_factor)
+	{
+		z_velocity_factor += velocity_factor_step;
+	}
+}
+
+void Ball::decrease_z_velocity()
+{
+	if (z_velocity_factor > min_velocity_factor)
+	{
+		z_velocity_factor -= velocity_factor_step;
 	}
 }

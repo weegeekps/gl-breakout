@@ -44,8 +44,12 @@ void Paddle::init(FieldConfiguration configuration)
 
 	z_position = configuration.z_start * -1.0f;
 
-	glm::mat4 translation_matrix = glm::translate(glm::vec3(x_position, 0.0f, z_position));
+	glm::vec3 initial_position = glm::vec3(x_position, 0.0f, z_position);
+	glm::mat4 translation_matrix = glm::translate(initial_position);
 	object->setMatrix(translation_matrix);
+
+	bounding_box = new BoundingBox(*object);
+	bounding_box->recalculate(initial_position);
 }
 
 void Paddle::draw()
@@ -70,10 +74,13 @@ void Paddle::draw()
 		x_position = new_x_position;
 	}
 
-	translation_matrix = glm::translate(glm::vec3(x_position, 0.0f, z_position));
+	glm::vec3 current_position = glm::vec3(x_position, 0.0f, z_position);
+	translation_matrix = glm::translate(current_position);
 	object->setMatrix(translation_matrix);
 
 	object->draw();
+
+	bounding_box->recalculate(current_position);
 }
 
 void Paddle::start_move_left()

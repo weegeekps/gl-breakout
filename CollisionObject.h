@@ -8,7 +8,7 @@ public:
 	~CollisionObject();
 
 	BoundingBox* get_bounding_box() const;
-	bool check_collision(CollisionObject& object);
+	bool check_collision(CollisionObject& object) const;
 protected:
 	BoundingBox* bounding_box;
 };

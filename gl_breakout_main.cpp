@@ -120,7 +120,7 @@ int main(int argc, const char * argv[])
 #pragma endregion 
 
 #pragma region Generate Ball
-	ball = new Ball();
+	ball = new Ball(1, 5, 1);
 	ball->init(configuration);
 #pragma endregion
 
@@ -157,11 +157,26 @@ int main(int argc, const char * argv[])
 			{
 				cout << "Wall Collision!" << endl;
 				ball->bounce_on_x_axis();
-				break;
+				
+				switch(wall->getType())
+				{
+				case BACK_WALL:
+					ball->increase_x_velocity();
+					break;
+				case LEFT_WALL:
+				case RIGHT_WALL:
+				default:
+					ball->increase_z_velocity();
+				}
 			}
 		}
 
 		paddle->draw();
+
+		if (ball->check_collision(*paddle))
+		{
+			ball->bounce_on_z_axis();
+		}
 
 		for (Block* block : blocks)
 		{

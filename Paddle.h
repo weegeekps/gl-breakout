@@ -10,6 +10,7 @@
 #include "gl_common/GLAppearance.h"
 #include "gl_common/GLObjectObj.h"
 #include "FieldConfiguration.h"
+#include "CollisionObject.h"
 
 enum PaddleMoveDirection {
 	PADDLE_STAY = 0,
@@ -17,7 +18,7 @@ enum PaddleMoveDirection {
 	PADDLE_RIGHT = 2
 };
 
-class Paddle
+class Paddle : public CollisionObject
 {
 	GLObjectObj* object = nullptr;
 	PaddleMoveDirection move = PADDLE_STAY;
