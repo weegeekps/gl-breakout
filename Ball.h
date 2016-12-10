@@ -1,6 +1,8 @@
 #pragma once
 #include "FieldConfiguration.h"
 #include "gl_common/GLObjectObj.h"
+#include "BoundingBox.h"
+#include "Block.h"
 
 enum BallXDirection
 {
@@ -14,9 +16,10 @@ enum BallZDirection
 	BALL_DOWN = -1
 };
 
-class Ball
+class Ball : public CollisionObject
 {
 	GLObjectObj* object = nullptr;
+	BoundingBox* bounding_box = nullptr;
 
 	float x_position = 0.0f;
 	float z_position = 0.0f;
@@ -24,14 +27,18 @@ class Ball
 	float base_velocity = 0.05f;
 
 	unsigned int x_velocity_factor = 1;
-	unsigned int z_velocity_factor = 2;
+	unsigned int z_velocity_factor = 1;
 
 	BallXDirection x_direction = BALL_LEFT;
 	BallZDirection z_direction = BALL_UP;
 
 	bool is_moving = false;
+	int dont_switch_x_counter = 0;
+
+	FieldConfiguration configuration;
 
 public:
+	
 	Ball();
 	~Ball();
 
@@ -39,5 +46,10 @@ public:
 	void draw();
 
 	void start_movement();
+	void stop_movement();
+	void reset();
+
+	void bounce_on_x_axis();
+	void bounce_on_z_axis();
 };
 

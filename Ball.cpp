@@ -4,7 +4,6 @@
 #include <glm/gtx/transform.hpp>
 #include "gl_common/GLObjectObj.h"
 
-
 Ball::Ball()
 {
 }
@@ -20,35 +19,34 @@ Ball::~Ball()
 
 void Ball::init(FieldConfiguration configuration)
 {
-		GLAppearance* appearance_0 = new GLAppearance("shaders/multi_vertex_lights.vs", "shaders/multi_vertex_lights.fs");
+	this->configuration = configuration;
 
-		GLDirectLightSource light_source;
-		light_source._lightPos = glm::vec4(20.0, 20.0, 0.0, 0.0);
-		light_source._ambient_intensity = 0.2f;
-		light_source._specular_intensity = 4.0f;
-		light_source._diffuse_intensity = 2.0f;
-		light_source._attenuation_coeff = 0.0f;
+	GLAppearance* appearance_0 = new GLAppearance("shaders/multi_vertex_lights.vs", "shaders/multi_vertex_lights.fs");
 
-		appearance_0->addLightSource(light_source);
+	GLDirectLightSource light_source;
+	light_source._lightPos = glm::vec4(20.0, 20.0, 0.0, 0.0);
+	light_source._ambient_intensity = 0.2f;
+	light_source._specular_intensity = 4.0f;
+	light_source._diffuse_intensity = 2.0f;
+	light_source._attenuation_coeff = 0.0f;
 
-		GLMaterial material_0;
-		material_0._diffuse_material = glm::vec3(0.9f, 0.9f, 0.9f);
-		material_0._ambient_material = glm::vec3(0.9f, 0.9f, 0.9f);
-		material_0._specular_material = glm::vec3(1.0, 1.0, 1.0);
-		material_0._shininess = 8.0f;
-		material_0._transparency = 1.0f;
+	appearance_0->addLightSource(light_source);
 
-		appearance_0->setMaterial(material_0);
-		appearance_0->finalize();
+	GLMaterial material_0;
+	material_0._diffuse_material = glm::vec3(0.9f, 0.9f, 0.9f);
+	material_0._ambient_material = glm::vec3(0.9f, 0.9f, 0.9f);
+	material_0._specular_material = glm::vec3(1.0, 1.0, 1.0);
+	material_0._shininess = 8.0f;
+	material_0._transparency = 1.0f;
 
-		object = new GLObjectObj("models/Ball.obj");
-		object->setApperance(*appearance_0);
-		object->init();
+	appearance_0->setMaterial(material_0);
+	appearance_0->finalize();
 
-		z_position = configuration.z_start * -1.0f + 1.0f;
+	object = new GLObjectObj("models/Ball.obj");
+	object->setApperance(*appearance_0);
+	object->init();
 
-		glm::mat4 translation_matrix = glm::translate(glm::vec3(x_position, 0.0f, z_position));
-		object->setMatrix(translation_matrix);
+	reset();
 }
 
 void Ball::draw()
@@ -68,8 +66,10 @@ void Ball::draw()
 		x_position += base_velocity * x_velocity_factor * x_direction;
 		z_position += base_velocity * z_velocity_factor * z_direction;
 
-		glm::mat4 translation_matrix = glm::translate(glm::vec3(x_position, 0.0f, z_position));
+		glm::vec3 translation_vector = glm::vec3(x_position, 0.0f, z_position);
+		glm::mat4 translation_matrix = glm::translate(translation_vector);
 		object->setMatrix(translation_matrix);
+		CollisionObject::bounding_box->recalculate(translation_vector);
 	}
 
 	object->draw();
@@ -78,4 +78,54 @@ void Ball::draw()
 void Ball::start_movement()
 {
 	is_moving = true;
+}
+
+void Ball::stop_movement()
+{
+	is_moving = true;
+}
+
+void Ball::reset()
+{
+	x_position = 0.0f;
+	z_position = configuration.z_start * -1.0f + 1.0f;
+
+	glm::vec3 initial_position = glm::vec3(x_position, 0.0f, z_position);
+	glm::mat4 translation_matrix = glm::translate(initial_position);
+	object->setMatrix(translation_matrix);
+
+	CollisionObject::bounding_box = new BoundingBox(*object);
+	CollisionObject::bounding_box->recalculate(initial_position);
+}
+
+void Ball::bounce_on_x_axis()
+{
+	if (dont_switch_x_counter > 0)
+	{
+		dont_switch_x_counter--;
+		return;
+	}
+
+	if (x_direction == BALL_LEFT)
+	{
+		x_direction = BALL_RIGHT;
+	} 
+	else
+	{
+		x_direction = BALL_LEFT;
+	}
+
+	dont_switch_x_counter = 20; // 5 frames. this is such a hack.
+}
+
+void Ball::bounce_on_z_axis()
+{
+	if (z_direction == BALL_UP)
+	{
+		z_direction = BALL_DOWN;
+	}
+	else
+	{
+		z_direction = BALL_UP;
+	}
 }

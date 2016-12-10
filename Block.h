@@ -7,14 +7,19 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include "gl_common/GLObjectObj.h"
+#include "BoundingBox.h"
+#include "CollisionObject.h"
 
-class Block
+class Block : public CollisionObject
 {
+	GLObjectObj* object;
+	bool is_visible;
+
 public:
 	Block();
 	~Block();
 	void draw() const;
 	void init(double x_position, double z_position, glm::vec3 color);
-private:
-	GLObjectObj* _object;
+	void toggle_block();
+	bool is_block_visible() const;
 };

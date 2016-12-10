@@ -321,11 +321,15 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="CollisionObject.cpp" />
     <ClCompile Include="Paddle.cpp" />
+    <ClCompile Include="Wall.cpp" />
     <ClCompile Include="Walls.cpp" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="BlockColorSequencer.h" />
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="C:\Users\amorris\Documents\Github\gl-breakout\gl_common\Box3D.h" />
     <ClInclude Include="C:\Users\amorris\Documents\Github\gl-breakout\gl_common\CoordSystem.h" />
     <ClInclude Include="C:\Users\amorris\Documents\Github\gl-breakout\gl_common\GLAppearance.h" />
@@ -367,8 +371,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\amorris\Documents\Github\gl-breakout\gl_common\camera.cpp" />
     <ClCompile Include="C:\Users\amorris\Documents\Github\gl-breakout\gl_common\controls.cpp" />
     <ClCompile Include="C:\Users\amorris\Documents\Github\gl-breakout\gl_common\trackball.cpp" />
+    <ClInclude Include="CollisionObject.h" />
     <ClInclude Include="FieldConfiguration.h" />
     <ClInclude Include="Paddle.h" />
+    <ClInclude Include="Wall.h" />
     <ClInclude Include="Walls.h" />
   </ItemGroup>
   <ItemGroup>
@@ -391,6 +397,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <None Include="models\Side_Wall.obj">
       <FileType>Document</FileType>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -4,22 +4,23 @@
 
 Block::Block()
 {
-	
+	object = nullptr;
+	is_visible = true;
 }
 
 Block::~Block()
 {
-	if (_object != nullptr)
+	if (object != nullptr)
 	{
-		delete _object;
+		delete object;
 	}
 }
 
 void Block::draw() const
 {
-	if (_object != nullptr)
+	if (object != nullptr)
 	{
-		_object->draw();
+		object->draw();
 	} else
 	{
 		assert("Call Block::init() prior to calling Block::draw()");
@@ -49,17 +50,29 @@ void Block::init(double x_position, double z_position, glm::vec3 color)
 	appearance_0->setMaterial(material_0);
 	appearance_0->finalize();
 
-	_object = new GLObjectObj("models/Normal_Block.obj");
-	_object->setApperance(*appearance_0);
-	_object->init();
+	object = new GLObjectObj("models/Normal_Block.obj");
+	object->setApperance(*appearance_0);
+	object->init();
 
 	// Correct based on the center point of model.
 	// This is a quality of life thing so I can have a consistent point at the bottom left corner.
 	x_position += 1.5;
 	z_position += 0.5;
 
-	glm::mat4 transform = glm::translate(glm::vec3(x_position, 0.0, z_position));
-	_object->setMatrix(transform);
+	glm::vec3 initial_position = glm::vec3(x_position, 0.0, z_position);
+	glm::mat4 transform = glm::translate(initial_position);
+	object->setMatrix(transform);
+
+	bounding_box = new BoundingBox(*object);
+	bounding_box->recalculate(initial_position); // This is the only time we have to recalcuate the AABB for the block.
 }
 
+void Block::toggle_block()
+{
+	is_visible = !is_visible;
+}
 
+bool Block::is_block_visible() const
+{
+	return is_visible;
+}

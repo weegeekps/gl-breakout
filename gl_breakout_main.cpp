@@ -13,9 +13,9 @@
 #include "gl_common/CoordSystem.h"
 #include "Block.h"
 #include "BlockColorSequencer.h"
-#include "Walls.h"
 #include "Paddle.h"
 #include "Ball.h"
+#include "Wall.h"
 
 GLFWwindow* window;
 GLuint program;
@@ -27,7 +27,7 @@ extern int g_change_texture_blend;
 FieldConfiguration configuration;
 BlockColorSequencer color_sequencer;
 vector<Block*> blocks = {};
-Walls* walls;
+vector<Wall*> walls = {};
 Paddle* paddle;
 Ball* ball;
 
@@ -89,8 +89,17 @@ int main(int argc, const char * argv[])
 	configuration.num_rows = 5;
 
 #pragma region Generate Walls
-	walls = new Walls();
-	walls->init(configuration);
+	Wall* left_wall = new Wall(LEFT_WALL);
+	left_wall->init(configuration);
+	walls.push_back(left_wall);
+
+	Wall* right_wall = new Wall(RIGHT_WALL);
+	right_wall->init(configuration);
+	walls.push_back(right_wall);
+
+	Wall* back_wall = new Wall(BACK_WALL);
+	back_wall->init(configuration);
+	walls.push_back(back_wall);
 #pragma endregion 
 
 #pragma region Generate Blocks
@@ -139,14 +148,38 @@ int main(int argc, const char * argv[])
 
 		// Draw our objects
 		//coordinate_system->draw();
-		walls->draw();
-		
-		for (Block* block : blocks)
+
+		for (Wall* wall : walls)
 		{
-			block->draw();
+			wall->draw();
+
+			if (ball->check_collision(*wall))
+			{
+				cout << "Wall Collision!" << endl;
+				ball->bounce_on_x_axis();
+				break;
+			}
 		}
 
 		paddle->draw();
+
+		for (Block* block : blocks)
+		{
+			if (!block->is_block_visible())
+			{
+				continue;
+			}
+
+			block->draw();
+			
+			if (ball->check_collision(*block))
+			{
+				cout << "Block Collision!" << endl;
+				block->toggle_block();
+				ball->bounce_on_z_axis();
+			}
+		}
+
 		ball->draw();
 
 		glfwSwapBuffers(window);
