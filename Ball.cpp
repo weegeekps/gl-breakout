@@ -21,16 +21,26 @@ void Ball::init(FieldConfiguration configuration)
 {
 	this->configuration = configuration;
 
-	GLAppearance* appearance_0 = new GLAppearance("shaders/multi_vertex_lights.vs", "shaders/multi_vertex_lights.fs");
+	GLAppearance* appearance_0 = new GLAppearance("shaders/spherical_mapping.vert", "shaders/spherical_mapping.frag");
 
-	GLDirectLightSource light_source;
-	light_source._lightPos = glm::vec4(20.0, 20.0, 0.0, 0.0);
-	light_source._ambient_intensity = 0.2f;
-	light_source._specular_intensity = 4.0f;
-	light_source._diffuse_intensity = 2.0f;
-	light_source._attenuation_coeff = 0.0f;
+	// TODO: Make it so you can toggle between the left and the right spotlight.
+	GLSpotLightSource left_spot_light_source;
+	left_spot_light_source._lightPos = glm::vec4(15.0f, 10.0f, 0.0f, 0.0f);
+	left_spot_light_source._ambient_intensity = 0.0f;
+	left_spot_light_source._specular_intensity = 1.0f;
+	left_spot_light_source._diffuse_intensity = 1.5f;
+	left_spot_light_source._attenuation_coeff = 0.0f;
 
-	appearance_0->addLightSource(light_source);
+	appearance_0->addLightSource(left_spot_light_source);
+
+	GLSpotLightSource right_spot_light_source;
+	right_spot_light_source._lightPos = glm::vec4(-15.0f, 10.0f, 0.0f, 0.0f);
+	right_spot_light_source._ambient_intensity = 0.0f;
+	right_spot_light_source._specular_intensity = 1.0f;
+	right_spot_light_source._diffuse_intensity = 1.5f;
+	right_spot_light_source._attenuation_coeff = 0.0f;
+
+	appearance_0->addLightSource(right_spot_light_source);
 
 	GLMaterial material_0;
 	material_0._diffuse_material = glm::vec3(0.9f, 0.9f, 0.9f);
@@ -40,6 +50,11 @@ void Ball::init(FieldConfiguration configuration)
 	material_0._transparency = 1.0f;
 
 	appearance_0->setMaterial(material_0);
+
+	GLTexture* texture = new GLTexture();
+	texture->loadAndCreateTexture("models/reflection_map.bmp");
+	appearance_0->setTexture(texture);
+
 	appearance_0->finalize();
 
 	object = new GLObjectObj("models/Ball.obj");
@@ -88,7 +103,7 @@ void Ball::stop_movement()
 void Ball::reset()
 {
 	x_position = 0.0f;
-	z_position = configuration.z_start * -1.0f + 1.0f;
+	z_position = configuration.z_start * -1.0f + 1.2f;
 
 	glm::vec3 initial_position = glm::vec3(x_position, 0.0f, z_position);
 	glm::mat4 translation_matrix = glm::translate(initial_position);

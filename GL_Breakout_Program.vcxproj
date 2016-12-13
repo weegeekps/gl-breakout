@@ -388,6 +388,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <None Include="shaders\multi_vertex_lights.fs" />
     <None Include="shaders\multi_vertex_lights.vs" />
+    <None Include="shaders\spherical_mapping.frag" />
+    <None Include="shaders\spherical_mapping.vert" />
   </ItemGroup>
   <ItemGroup>
     <None Include="models\Normal_Block.obj">
@@ -414,6 +416,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <None Include="models\Ball.obj">
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="models\reflection_map.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
