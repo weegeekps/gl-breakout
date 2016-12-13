@@ -324,6 +324,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="CollisionObject.cpp" />
     <ClCompile Include="Paddle.cpp" />
+    <ClCompile Include="TogglableSpotLightSource.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="Walls.cpp" />
     <ClInclude Include="Ball.h" />
@@ -374,6 +375,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="CollisionObject.h" />
     <ClInclude Include="FieldConfiguration.h" />
     <ClInclude Include="Paddle.h" />
+    <ClInclude Include="TogglableSpotLightSource.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="Walls.h" />
   </ItemGroup>

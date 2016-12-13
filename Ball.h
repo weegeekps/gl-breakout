@@ -3,6 +3,7 @@
 #include "gl_common/GLObjectObj.h"
 #include "BoundingBox.h"
 #include "Block.h"
+#include "TogglableSpotLightSource.h"
 
 enum BallXDirection
 {
@@ -41,6 +42,10 @@ class Ball : public CollisionObject
 
 	FieldConfiguration configuration;
 
+	GLAppearance* appearance_0;
+	TogglableSpotLightSource left_spot_light_source;
+	TogglableSpotLightSource right_spot_light_source;
+
 public:
 	
 	Ball(unsigned int min_velocity_factor, unsigned int max_velocity_factor, unsigned int velocity_factor_step);
@@ -61,5 +66,7 @@ public:
 
 	void increase_z_velocity();
 	void decrease_z_velocity();
+
+	void swap_light_sources();
 };
 

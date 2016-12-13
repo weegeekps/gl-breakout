@@ -23,6 +23,7 @@ uniform struct Light {
     float attenuationCoefficient;
     float cone_angle;
     vec3 cone_direction;
+	int light_state;
 } allLights[MAX_LIGHTS];
 
 
@@ -180,8 +181,10 @@ void main(void)
     vec4 linearColor = vec4(0.0,0.0,0.0,0.0);
     
     for (int i=0; i<numLights; i++) {
-        vec4 new_light = useLight(allLights[i], surfacePostion, transformedNormal, normal, allMaterials[0] );
-        linearColor = linearColor + new_light;
+		if (allLights[i].light_state == 1) {
+			vec4 new_light = useLight(allLights[i], surfacePostion, transformedNormal, normal, allMaterials[0] );
+			linearColor = linearColor + new_light;
+		}
     }
     
     //---------------------------------------------------------------------------

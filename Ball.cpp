@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include "gl_common/GLObjectObj.h"
+#include "TogglableSpotLightSource.h"
 
 Ball::Ball(unsigned int min_velocity_factor, unsigned int max_velocity_factor, unsigned int velocity_factor_step): min_velocity_factor(min_velocity_factor), max_velocity_factor(max_velocity_factor), velocity_factor_step(velocity_factor_step)
 {
@@ -15,17 +16,20 @@ Ball::~Ball()
 	{
 		delete object;
 	}
+
+	if (appearance_0 != nullptr)
+	{
+		delete appearance_0;
+	}
 }
 
 void Ball::init(FieldConfiguration configuration)
 {
 	this->configuration = configuration;
 
-	GLAppearance* appearance_0 = new GLAppearance("shaders/spherical_mapping.vert", "shaders/spherical_mapping.frag");
+	appearance_0 = new GLAppearance("shaders/spherical_mapping.vert", "shaders/spherical_mapping.frag");
 
-	// TODO: Make it so you can toggle between the left and the right spotlight.
-	GLSpotLightSource left_spot_light_source;
-	left_spot_light_source._lightPos = glm::vec4(15.0f, 10.0f, 0.0f, 0.0f);
+	left_spot_light_source._lightPos = glm::vec4(20.0f, 10.0f, 0.0f, 0.0f);
 	left_spot_light_source._ambient_intensity = 0.0f;
 	left_spot_light_source._specular_intensity = 1.0f;
 	left_spot_light_source._diffuse_intensity = 1.5f;
@@ -33,12 +37,12 @@ void Ball::init(FieldConfiguration configuration)
 
 	appearance_0->addLightSource(left_spot_light_source);
 
-	GLSpotLightSource right_spot_light_source;
-	right_spot_light_source._lightPos = glm::vec4(-15.0f, 10.0f, 0.0f, 0.0f);
+	right_spot_light_source._lightPos = glm::vec4(-20.0f, 10.0f, 0.0f, 0.0f);
 	right_spot_light_source._ambient_intensity = 0.0f;
 	right_spot_light_source._specular_intensity = 1.0f;
 	right_spot_light_source._diffuse_intensity = 1.5f;
 	right_spot_light_source._attenuation_coeff = 0.0f;
+	right_spot_light_source.turn_light_off();
 
 	appearance_0->addLightSource(right_spot_light_source);
 
@@ -123,6 +127,8 @@ void Ball::bounce_on_x_axis()
 	{
 		x_direction = BALL_LEFT;
 	}
+
+	swap_light_sources();
 }
 
 void Ball::bounce_on_z_axis()
@@ -167,4 +173,19 @@ void Ball::decrease_z_velocity()
 	{
 		z_velocity_factor -= velocity_factor_step;
 	}
+}
+
+void Ball::swap_light_sources()
+{
+	if (left_spot_light_source.is_light_on())
+	{
+		left_spot_light_source.turn_light_off();
+		right_spot_light_source.turn_light_on();
+	} else
+	{
+		left_spot_light_source.turn_light_on();
+		right_spot_light_source.turn_light_off();
+	}
+
+	appearance_0->updateLightSources();
 }
