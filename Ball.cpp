@@ -55,7 +55,7 @@ void Ball::init(FieldConfiguration configuration)
 
 	appearance_0->setMaterial(material_0);
 
-	GLTexture* texture = new GLTexture();
+	texture = new GLTexture();
 	texture->loadAndCreateTexture("models/reflection_map.bmp");
 	appearance_0->setTexture(texture);
 
@@ -90,6 +90,8 @@ void Ball::draw()
 		object->setMatrix(translation_matrix);
 		CollisionObject::bounding_box->recalculate(translation_vector);
 	}
+
+	texture->activate_texture(object->getProgram());
 
 	object->draw();
 }

@@ -76,6 +76,7 @@ public:
      */
     bool setTextureBlendMode(int mode);
     
+	void activate_texture(GLuint program);
     
 protected:
     
@@ -151,7 +152,7 @@ public:
      */
     bool setTextureBlendMode(int mode);
     
-    
+	void activate_texture(GLuint program);
     
 protected:
     
@@ -159,9 +160,8 @@ protected:
      Adds the variables of this object to the shader program
      */
     virtual bool addVariablesToProgram(GLuint program, int variable_index);
-    
-    
-    /*!
+
+	/*!
      The function indicates that the variables of this object require an update
      */
     virtual bool dirty(GLuint program);

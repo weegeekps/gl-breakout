@@ -22,6 +22,7 @@ class Paddle : public CollisionObject
 {
 	GLObjectObj* object = nullptr;
 	PaddleMoveDirection move = PADDLE_STAY;
+	GLMultiTexture* texture_0 = nullptr;
 
 	float x_position = 0.0f;
 	float z_position = 0.0f;

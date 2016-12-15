@@ -17,6 +17,7 @@ enum WALL_TYPE { LEFT_WALL, RIGHT_WALL, BACK_WALL };
 class Wall : public CollisionObject
 {
 	GLObjectObj* wall;
+	GLMultiTexture* texture = nullptr;
 
 	const WALL_TYPE type;
 

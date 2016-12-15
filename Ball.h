@@ -21,6 +21,7 @@ class Ball : public CollisionObject
 {
 	GLObjectObj* object = nullptr;
 	BoundingBox* bounding_box = nullptr;
+	GLTexture* texture = nullptr;
 
 	float x_position = 0.0f;
 	float z_position = 0.0f;

@@ -17,13 +17,13 @@ Paddle::~Paddle()
 
 void Paddle::init(FieldConfiguration configuration)
 {
-	GLAppearance* appearance_0 = new GLAppearance("shaders/multi_vertex_lights.vs", "shaders/multi_vertex_lights.fs");
+	GLAppearance* appearance_0 = new GLAppearance("shaders/displacement_texture.vert", "shaders/displacement_texture.frag");
 
 	GLDirectLightSource light_source;
 	light_source._lightPos = glm::vec4(20.0, 20.0, 0.0, 0.0);
 	light_source._ambient_intensity = 0.2f;
-	light_source._specular_intensity = 4.0f;
-	light_source._diffuse_intensity = 2.0f;
+	light_source._specular_intensity = 2.0f;
+	light_source._diffuse_intensity = 1.0f;
 	light_source._attenuation_coeff = 0.0f;
 
 	appearance_0->addLightSource(light_source);
@@ -36,6 +36,11 @@ void Paddle::init(FieldConfiguration configuration)
 	material_0._transparency = 1.0f;
 
 	appearance_0->setMaterial(material_0);
+
+	texture_0 = new GLMultiTexture();
+	texture_0->loadAndCreateTextures("models/paddle.bmp", "models/paddle_norm.bmp");
+	appearance_0->setTexture(texture_0);
+
 	appearance_0->finalize();
 
 	object = new GLObjectObj("models/Paddle.obj");
@@ -77,6 +82,8 @@ void Paddle::draw()
 	glm::vec3 current_position = glm::vec3(x_position, 0.0f, z_position);
 	translation_matrix = glm::translate(current_position);
 	object->setMatrix(translation_matrix);
+
+	texture_0->activate_texture(object->getProgram());
 
 	object->draw();
 

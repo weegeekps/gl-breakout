@@ -32,7 +32,7 @@ Wall::~Wall()
 
 void Wall::init(FieldConfiguration configuration)
 {
-	GLAppearance* appearance_0 = new GLAppearance("shaders/multi_vertex_lights.vs", "shaders/multi_vertex_lights.fs");
+	GLAppearance* appearance_0 = new GLAppearance("shaders/displacement_texture.vert", "shaders/displacement_texture.frag");
 
 	GLDirectLightSource light_source;
 	light_source._lightPos = glm::vec4(20.0, 20.0, 0.0, 0.0);
@@ -51,6 +51,11 @@ void Wall::init(FieldConfiguration configuration)
 	material_0._transparency = 1.0f;
 
 	appearance_0->setMaterial(material_0);
+
+	texture = new GLMultiTexture();
+	texture->loadAndCreateTextures("models/walls.bmp", "models/walls_norm.bmp");
+	appearance_0->setTexture(texture);
+
 	appearance_0->finalize();
 
 	wall = new GLObjectObj(model_for_type());
@@ -95,6 +100,8 @@ void Wall::draw() const
 	{
 		assert("You must call Walls::init(FieldConfiguration) before calling Walls::draw()");
 	}
+
+	texture->activate_texture(wall->getProgram());
 
 	wall->draw();
 }

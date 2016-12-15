@@ -191,6 +191,19 @@ bool GLTexture::addVariablesToProgram(GLuint program, int variable_index )
     return true;
 }
 
+void GLTexture::activate_texture(GLuint program)
+{
+	glUseProgram(program);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	//We use glBindTexture bind our texture into the active texture unit.
+	glBindTexture(GL_TEXTURE_2D, _texture);
+
+	glUseProgram(0);
+}
+
+
 
 /*!
  The function indicates that the variables of this object require an update
@@ -203,7 +216,6 @@ bool GLTexture::dirty(GLuint program)
  
     // write the texture blend mode
     glUniform1i(_textureBlendModelIdx, _texture_blend_mode);
-    
     
     // disable the program
     glUseProgram(0);
@@ -465,6 +477,21 @@ bool GLMultiTexture::addVariablesToProgram(GLuint program, int variable_index)
 
 }
 
+void GLMultiTexture::activate_texture(GLuint program)
+{
+	glUseProgram(program);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	//We use glBindTexture bind our texture into the active texture unit.
+	glBindTexture(GL_TEXTURE_2D, _texture_1);
+
+	glActiveTexture(GL_TEXTURE1);
+
+	glBindTexture(GL_TEXTURE_2D, _texture_2);
+
+	glUseProgram(0);
+}
 
 /*!
  The function indicates that the variables of this object require an update

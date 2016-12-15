@@ -117,6 +117,7 @@ int main(int argc, const char * argv[])
 #pragma region Generate Paddle
 	paddle = new Paddle();
 	paddle->init(configuration);
+	paddle->draw();
 #pragma endregion 
 
 #pragma region Generate Ball

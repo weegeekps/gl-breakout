@@ -326,7 +326,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="TogglableSpotLightSource.cpp" />
     <ClCompile Include="Wall.cpp" />
-    <ClCompile Include="Walls.cpp" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="BlockColorSequencer.h" />
@@ -377,7 +376,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="Paddle.h" />
     <ClInclude Include="TogglableSpotLightSource.h" />
     <ClInclude Include="Wall.h" />
-    <ClInclude Include="Walls.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/Users/amorris/Documents/Github/gl-breakout/ZERO_CHECK.vcxproj">
@@ -388,8 +386,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ResourceCompile Include="GL_Breakout_Program.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\displacement_texture.frag" />
+    <None Include="shaders\displacement_texture.vert" />
     <None Include="shaders\multi_vertex_lights.fs" />
     <None Include="shaders\multi_vertex_lights.vs" />
+    <None Include="shaders\paddle.frag" />
+    <None Include="shaders\paddle.vert" />
     <None Include="shaders\spherical_mapping.frag" />
     <None Include="shaders\spherical_mapping.vert" />
   </ItemGroup>
@@ -421,6 +423,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="models\reflection_map.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="models\Paddle_Textured.obj">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
