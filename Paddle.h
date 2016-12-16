@@ -24,6 +24,8 @@ class Paddle : public CollisionObject
 	PaddleMoveDirection move = PADDLE_STAY;
 	GLMultiTexture* texture_0 = nullptr;
 
+	FieldConfiguration configuration;
+
 	float x_position = 0.0f;
 	float z_position = 0.0f;
 
@@ -37,5 +39,11 @@ public:
 	void start_move_left();
 	void start_move_right();
 	void stop_move();
+	void reset();
+
+	float get_x_position() const;
+	float measure_x_distance_from_paddle_center(float other_x_position) const;
+
+	PaddleMoveDirection get_direction() const;
 };
 

@@ -47,6 +47,8 @@ class Ball : public CollisionObject
 	TogglableSpotLightSource left_spot_light_source;
 	TogglableSpotLightSource right_spot_light_source;
 
+	void set_position() const;
+
 public:
 	
 	Ball(unsigned int min_velocity_factor, unsigned int max_velocity_factor, unsigned int velocity_factor_step);
@@ -57,7 +59,11 @@ public:
 
 	void start_movement();
 	void stop_movement();
+	bool is_ball_moving() const;
+	void move_ball_to_x_position(float paddle_x_position);
 	void reset();
+
+	bool is_ball_out_of_bounds() const;
 
 	void bounce_on_x_axis();
 	void bounce_on_z_axis();
@@ -69,5 +75,9 @@ public:
 	void decrease_z_velocity();
 
 	void swap_light_sources();
+
+	float get_x_position() const;
+
+	void set_start_direction(BallXDirection direction);
 };
 

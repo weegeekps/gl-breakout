@@ -5,6 +5,14 @@
 #include "gl_common/GLObjectObj.h"
 #include "TogglableSpotLightSource.h"
 
+void Ball::set_position() const
+{
+	glm::vec3 translation_vector = glm::vec3(x_position, 0.0f, z_position);
+	glm::mat4 translation_matrix = glm::translate(translation_vector);
+	object->setMatrix(translation_matrix);
+	CollisionObject::bounding_box->recalculate(translation_vector);
+}
+
 Ball::Ball(unsigned int min_velocity_factor, unsigned int max_velocity_factor, unsigned int velocity_factor_step): min_velocity_factor(min_velocity_factor), max_velocity_factor(max_velocity_factor), velocity_factor_step(velocity_factor_step)
 {
 }
@@ -68,6 +76,25 @@ void Ball::init(FieldConfiguration configuration)
 	reset();
 }
 
+void Ball::reset()
+{
+	x_direction = BALL_LEFT;
+	z_direction = BALL_UP;
+
+	x_velocity_factor = 1;
+	z_velocity_factor = 1;
+
+	x_position = 0.0f;
+	z_position = configuration.z_start * -1.0f + 1.2f;
+
+	glm::vec3 initial_position = glm::vec3(x_position, 0.0f, z_position);
+	glm::mat4 translation_matrix = glm::translate(initial_position);
+	object->setMatrix(translation_matrix);
+
+	CollisionObject::bounding_box = new BoundingBox(*object);
+	CollisionObject::bounding_box->recalculate(initial_position);
+}
+
 void Ball::draw()
 {
 	if (is_moving)
@@ -85,10 +112,7 @@ void Ball::draw()
 		x_position += base_velocity * x_velocity_factor * x_direction;
 		z_position += base_velocity * z_velocity_factor * z_direction;
 
-		glm::vec3 translation_vector = glm::vec3(x_position, 0.0f, z_position);
-		glm::mat4 translation_matrix = glm::translate(translation_vector);
-		object->setMatrix(translation_matrix);
-		CollisionObject::bounding_box->recalculate(translation_vector);
+		set_position();
 	}
 
 	texture->activate_texture(object->getProgram());
@@ -103,20 +127,29 @@ void Ball::start_movement()
 
 void Ball::stop_movement()
 {
-	is_moving = true;
+	is_moving = false;
 }
 
-void Ball::reset()
+bool Ball::is_ball_moving() const
 {
-	x_position = 0.0f;
-	z_position = configuration.z_start * -1.0f + 1.2f;
+	return is_moving;
+}
 
-	glm::vec3 initial_position = glm::vec3(x_position, 0.0f, z_position);
-	glm::mat4 translation_matrix = glm::translate(initial_position);
-	object->setMatrix(translation_matrix);
+void Ball::move_ball_to_x_position(float paddle_x_position)
+{
+	x_position = paddle_x_position;
 
-	CollisionObject::bounding_box = new BoundingBox(*object);
-	CollisionObject::bounding_box->recalculate(initial_position);
+	set_position();
+}
+
+bool Ball::is_ball_out_of_bounds() const
+{
+	if (z_position < configuration.z_start * -1.0f)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void Ball::bounce_on_x_axis()
@@ -183,11 +216,25 @@ void Ball::swap_light_sources()
 	{
 		left_spot_light_source.turn_light_off();
 		right_spot_light_source.turn_light_on();
-	} else
+	}
+	else
 	{
 		left_spot_light_source.turn_light_on();
 		right_spot_light_source.turn_light_off();
 	}
 
 	appearance_0->updateLightSources();
+}
+
+float Ball::get_x_position() const
+{
+	return x_position;
+}
+
+void Ball::set_start_direction(BallXDirection direction)
+{
+	if (!is_moving)
+	{
+		x_direction = direction;
+	}
 }

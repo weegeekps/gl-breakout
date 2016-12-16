@@ -17,6 +17,8 @@ Paddle::~Paddle()
 
 void Paddle::init(FieldConfiguration configuration)
 {
+	this->configuration = configuration;
+
 	GLAppearance* appearance_0 = new GLAppearance("shaders/displacement_texture.vert", "shaders/displacement_texture.frag");
 
 	GLDirectLightSource light_source;
@@ -47,6 +49,12 @@ void Paddle::init(FieldConfiguration configuration)
 	object->setApperance(*appearance_0);
 	object->init();
 
+	reset();
+}
+
+void Paddle::reset()
+{
+	x_position = 0.0f;
 	z_position = configuration.z_start * -1.0f;
 
 	glm::vec3 initial_position = glm::vec3(x_position, 0.0f, z_position);
@@ -55,6 +63,21 @@ void Paddle::init(FieldConfiguration configuration)
 
 	bounding_box = new BoundingBox(*object);
 	bounding_box->recalculate(initial_position);
+}
+
+float Paddle::get_x_position() const
+{
+	return x_position;
+}
+
+float Paddle::measure_x_distance_from_paddle_center(float other_x_position) const
+{
+	return glm::abs(other_x_position - x_position);
+}
+
+PaddleMoveDirection Paddle::get_direction() const
+{
+	return move;
 }
 
 void Paddle::draw()

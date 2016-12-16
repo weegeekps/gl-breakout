@@ -29,16 +29,28 @@ void Block::draw() const
 
 void Block::init(double x_position, double z_position, glm::vec3 color)
 {
-	GLAppearance* appearance_0 = new GLAppearance("shaders/multi_vertex_lights.vs", "shaders/multi_vertex_lights.fs");
+	appearance_0 = new GLAppearance("shaders/multi_vertex_lights.vert", "shaders/multi_vertex_lights.frag");
 
-	GLDirectLightSource light_source;
-	light_source._lightPos = glm::vec4(20.0, 20.0, 0.0, 0.0);
-	light_source._ambient_intensity = 0.2f;
-	light_source._specular_intensity = 4.0f;
-	light_source._diffuse_intensity = 2.0f;
-	light_source._attenuation_coeff = 0.0f;
+	left_spot_light_source._lightPos = glm::vec4(20.0, 20.0, 0.0, 1.0);
+	left_spot_light_source._ambient_intensity = 0.0f;
+	left_spot_light_source._specular_intensity = 4.0f;
+	left_spot_light_source._diffuse_intensity = 2.0f;
+	left_spot_light_source._attenuation_coeff = 0.00005f;
+	left_spot_light_source._cone_angle = 90.0f; 
+	left_spot_light_source._cone_direction = glm::vec3(0.0, -3.0, -3.0);
+	left_spot_light_source.turn_light_off();
 
-	appearance_0->addLightSource(light_source);
+	appearance_0->addLightSource(left_spot_light_source);
+
+	right_spot_light_source._lightPos = glm::vec4(-20.0, 20.0, 0.0, 1.0);
+	right_spot_light_source._ambient_intensity = 0.0f;
+	right_spot_light_source._specular_intensity = 4.0f;
+	right_spot_light_source._diffuse_intensity = 2.0f;
+	right_spot_light_source._attenuation_coeff = 0.00005f;
+	right_spot_light_source._cone_angle = 90.0f;
+	right_spot_light_source._cone_direction = glm::vec3(0.0, -3.0, -3.0);
+
+	appearance_0->addLightSource(right_spot_light_source);
 
 	GLMaterial material_0;
 	material_0._diffuse_material = color;
@@ -75,4 +87,20 @@ void Block::toggle_block()
 bool Block::is_block_visible() const
 {
 	return is_visible;
+}
+
+void Block::swap_light_sources()
+{
+	if (left_spot_light_source.is_light_on())
+	{
+		left_spot_light_source.turn_light_off();
+		right_spot_light_source.turn_light_on();
+	}
+	else
+	{
+		left_spot_light_source.turn_light_on();
+		right_spot_light_source.turn_light_off();
+	}
+
+	appearance_0->updateLightSources();
 }
